@@ -6,6 +6,6 @@ Overview
 --------
 Common classes for these libraries.
 
-* flectSoap
-* flectSalesforce
+- [flectSoap](https://github.com/shunjikonishi/flectSoap)
+- [flectSalesforce](https://github.com/shunjikonishi/flectSalesforce)
 
