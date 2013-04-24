@@ -15,6 +15,7 @@ public class CSVWriter {
 	public enum QuoteType {
 		NONE,
 		ALL,
+		ALL_EXPECT_NULL,
 		NECESSARY
 	};
 	
@@ -98,7 +99,10 @@ public class CSVWriter {
 					writeNone(line); 
 					break;
 				case ALL: 
-					writeAll(line); 
+					writeAll(line, true); 
+					break;
+				case ALL_EXPECT_NULL: 
+					writeAll(line, false); 
 					break;
 				case NECESSARY: 
 					writeNecessary(line); 
@@ -118,24 +122,24 @@ public class CSVWriter {
 		}
 	}
 	
-	private void writeAll(String[] line) throws IOException {
-		writeQuote(line[0]);
+	private void writeAll(String[] line, boolean quoteNull) throws IOException {
+		writeQuote(line[0], quoteNull);
 		for (int i=1; i<line.length; i++) {
 			writer.write(separator);
-			writeQuote(line[i]);
+			writeQuote(line[i], quoteNull);
 		}
 	}
 	
 	private void writeNecessary(String[] line) throws IOException {
 		if (isNeedQuote(line[0])) {
-			writeQuote(line[0]);
+			writeQuote(line[0], true);
 		} else {
 			writeNoQuote(line[0]);
 		}
 		for (int i=1; i<line.length; i++) {
 			writer.write(separator);
 			if (isNeedQuote(line[i])) {
-				writeQuote(line[i]);
+				writeQuote(line[i], true);
 			} else {
 				writeNoQuote(line[i]);
 			}
@@ -149,7 +153,10 @@ public class CSVWriter {
 		writer.write(s);
 	}
 	
-	private void writeQuote(String s) throws IOException {
+	private void writeQuote(String s, boolean quoteNull) throws IOException {
+		if (s == null && !quoteNull) {
+			return;
+		}
 		writer.write(quoteChar);
 		if (s != null) {
 			int len = s.length();
