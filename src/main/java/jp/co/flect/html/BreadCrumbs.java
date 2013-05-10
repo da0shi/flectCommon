@@ -78,7 +78,14 @@ public class BreadCrumbs {
 	 * パン屑リストのHTMLを返します。
 	 */
 	public String toString() {
-		return toString(crumbHtml, sepHtml);
+		return toString(this.crumbHtml, this.sepHtml);
+	}
+	
+	/**
+	 * バン屑部分のHTMLを指定してHTMLを返します。
+	 */
+	public String toString(String crumb) {
+		return toString(crumb, this.sepHtml);
 	}
 	
 	/**
