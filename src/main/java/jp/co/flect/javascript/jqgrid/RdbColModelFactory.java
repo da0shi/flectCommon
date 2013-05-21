@@ -35,6 +35,15 @@ public class RdbColModelFactory {
 	}
 	
 	public ColModel getQueryModel(String query) throws SQLException {
+		PreparedStatement stmt0 = con.prepareStatement(query);
+		try {
+			ResultSetMetaData meta = stmt0.getMetaData();
+			return getQueryModel(query, meta);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			stmt0.close();
+		}
 		PreparedStatement stmt = con.prepareStatement("SELECT * FROM (" + query + ") TEMP WHERE 1=2");
 		try {
 			ResultSet rs = stmt.executeQuery();
