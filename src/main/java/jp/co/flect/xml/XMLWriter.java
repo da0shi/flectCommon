@@ -27,10 +27,6 @@ import org.w3c.dom.NamedNodeMap;
  */
 public class XMLWriter {
 	
-	public static String SOAP_PREFIX = "soap";
-	public static String XSD_PREFIX  = "xsd";
-	public static String XSI_PREFIX  = "xsi";
-	
 	private Writer writer;
 	private String space;
 	private String encoding;
@@ -332,42 +328,6 @@ public class XMLWriter {
 	
 	public void close() throws IOException {
 		this.writer.close();
-	}
-	
-	//Syntax sugar
-	public void startSoapEnvelope(Map<String, String> attrs) throws IOException {
-		openElement(SOAP_PREFIX + ":Envelope");
-		attr("xmlns:" + SOAP_PREFIX, XMLUtils.XMLNS_SOAP_ENVELOPE);
-		attr("xmlns:" + XSD_PREFIX, XMLUtils.XMLNS_XSD);
-		attr("xmlns:" + XSI_PREFIX, XMLUtils.XMLNS_XSI);
-		if (attrs != null) {
-			for (Map.Entry<String, String> entry : attrs.entrySet()) {
-				attr(entry.getKey(), entry.getValue());
-			}
-		}
-		endTag();
-	}
-	
-	public void endSoapEnvelope() throws IOException {
-		endElement(SOAP_PREFIX + ":Envelope");
-	}
-	
-	public void startSoapHeader() throws IOException {
-		openElement(SOAP_PREFIX+ ":Header");
-		endTag();
-	}
-	
-	public void endSoapHeader() throws IOException {
-		endElement(SOAP_PREFIX + ":Header");
-	}
-	
-	public void startSoapBody() throws IOException {
-		openElement(SOAP_PREFIX + ":Body");
-		endTag();
-	}
-	
-	public void endSoapBody() throws IOException {
-		endElement(SOAP_PREFIX + ":Body");
 	}
 	
 }
