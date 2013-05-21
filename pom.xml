@@ -14,6 +14,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<github.global.server>github</github.global.server>
 	</properties>
 	
 	<dependencies>
@@ -46,6 +47,7 @@
 			<groupId>org.mortbay.jetty</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5-6.0.1</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>xerces</groupId>
@@ -137,195 +139,44 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>appassembler-maven-plugin</artifactId>
-				<version>1.1.1</version>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.7</version>
+				<configuration>
+					<message>Maven artifacts for ${project.version}</message>
+					<noJekyll>true</noJekyll>
+					<outputDirectory>${env.MAVEN_LOCAL_REPOSITORY}</outputDirectory>
+					<branch>refs/heads/gh-pages</branch>
+					<includes>
+						<include>**/*</include>
+					</includes>
+					<repositoryName>maven-repo</repositoryName>
+					<repositoryOwner>shunjikonishi</repositoryOwner>
+				</configuration>
 				<executions>
 					<execution>
-						<id>test</id>
-						<phase>package</phase>
-						<goals><goal>assemble</goal></goals>
-						<configuration>
-							<assembleDirectory>target</assembleDirectory>
-							<programs>
-								<program>
-									<mainClass>jp.co.flect.papertrail.LogAnalyzer</mainClass>
-									<name>test</name>
-								</program>
-							</programs>
-						</configuration>
-					</execution>
-					<execution>
-						<id>xslt</id>
-						<phase>package</phase>
-						<goals><goal>assemble</goal></goals>
-						<configuration>
-							<assembleDirectory>target</assembleDirectory>
-							<programs>
-								<program>
-									<mainClass>jp.co.flect.app.XSLT</mainClass>
-									<name>xslt</name>
-								</program>
-							</programs>
-						</configuration>
-					</execution>
-					<execution>
-						<id>pt-c</id>
-						<phase>package</phase>
-						<goals><goal>assemble</goal></goals>
-						<configuration>
-							<assembleDirectory>target</assembleDirectory>
-							<programs>
-								<program>
-									<mainClass>jp.co.flect.papertrail.LogCutter</mainClass>
-									<name>pt-c</name>
-								</program>
-							</programs>
-						</configuration>
-					</execution>
-					<execution>
-						<id>pt-a</id>
-						<phase>package</phase>
-						<goals><goal>assemble</goal></goals>
-						<configuration>
-							<assembleDirectory>target</assembleDirectory>
-							<programs>
-								<program>
-									<mainClass>jp.co.flect.papertrail.LogAnalyzer</mainClass>
-									<name>pt-a</name>
-								</program>
-							</programs>
-						</configuration>
-					</execution>
-					<execution>
-						<id>xlsxdiff</id>
-						<phase>package</phase>
-						<goals><goal>assemble</goal></goals>
-						<configuration>
-							<assembleDirectory>target</assembleDirectory>
-							<programs>
-								<program>
-									<mainClass>jp.co.flect.excel.XlsxDiff</mainClass>
-									<name>xlsxdiff</name>
-								</program>
-							</programs>
-						</configuration>
-					</execution>
-					<execution>
-						<id>papertrail</id>
-						<phase>package</phase>
-						<goals><goal>assemble</goal></goals>
-						<configuration>
-							<assembleDirectory>target</assembleDirectory>
-							<programs>
-								<program>
-									<mainClass>jp.co.flect.papertrail.PapertrailClient</mainClass>
-									<name>pt</name>
-								</program>
-							</programs>
-						</configuration>
-					</execution>
-					<execution>
-						<id>windowsService</id>
-						<phase>package</phase>
-						<goals><goal>assemble</goal></goals>
-						<configuration>
-							<assembleDirectory>target</assembleDirectory>
-							<programs>
-								<program>
-									<mainClass>jp.co.flect.app.WindowsService</mainClass>
-									<name>windowsService</name>
-								</program>
-							</programs>
-						</configuration>
-					</execution>
-					<execution>
-						<id>commandClient</id>
-						<phase>package</phase>
-						<goals><goal>assemble</goal></goals>
-						<configuration>
-							<assembleDirectory>target</assembleDirectory>
-							<programs>
-								<program>
-									<mainClass>jp.co.flect.command.CommandClient</mainClass>
-									<name>commandClient</name>
-								</program>
-							</programs>
-						</configuration>
-					</execution>
-					<execution>
-						<id>soapgen</id>
-						<phase>package</phase>
-						<goals><goal>assemble</goal></goals>
-						<configuration>
-							<assembleDirectory>target</assembleDirectory>
-							<programs>
-								<program>
-									<mainClass>jp.co.flect.app.SoapGen</mainClass>
-									<name>soapgen</name>
-								</program>
-							</programs>
-						</configuration>
-					</execution>
-					<execution>
-						<id>memstat</id>
-						<phase>package</phase>
-						<goals><goal>assemble</goal></goals>
-						<configuration>
-							<assembleDirectory>target</assembleDirectory>
-							<programs>
-								<program>
-									<mainClass>jp.co.flect.app.MemcachedStatus</mainClass>
-									<name>memstat</name>
-								</program>
-							</programs>
-						</configuration>
-					</execution>
-					<execution>
-						<id>queueObserved</id>
-						<phase>package</phase>
-						<goals><goal>assemble</goal></goals>
-						<configuration>
-							<assembleDirectory>target</assembleDirectory>
-							<programs>
-								<program>
-									<mainClass>jp.co.flect.app.QueueObserver</mainClass>
-									<name>queueobserved</name>
-								</program>
-							</programs>
-						</configuration>
-					</execution>
-					<execution>
-						<id>resourcegen</id>
-						<phase>package</phase>
-						<goals><goal>assemble</goal></goals>
-						<configuration>
-							<assembleDirectory>target</assembleDirectory>
-							<programs>
-								<program>
-									<mainClass>jp.co.flect.app.ResourceGen</mainClass>
-									<name>resourcegen</name>
-								</program>
-							</programs>
-						</configuration>
-					</execution>
-					<execution>
-						<id>indent</id>
-						<phase>package</phase>
-						<goals><goal>assemble</goal></goals>
-						<configuration>
-							<assembleDirectory>target</assembleDirectory>
-							<programs>
-								<program>
-									<mainClass>jp.co.flect.app.IndentXML</mainClass>
-									<name>indent</name>
-								</program>
-							</programs>
-						</configuration>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>deploy</phase>
 					</execution>
 				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.eclipse.mylyn.github</groupId>
+						<artifactId>org.eclipse.egit.github.core</artifactId>
+						<version>2.0.3</version>
+					</dependency>                        
+				</dependencies> 
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>local.repo</id>
+			<name>My Repository</name>
+			<url>file://${env.MAVEN_LOCAL_REPOSITORY}</url>
+		</repository>
+	</distributionManagement>
 </project>
 
