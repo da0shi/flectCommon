@@ -3,6 +3,7 @@ package jp.co.flect.javascript.jqgrid;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Arrays;
 
 import jp.co.flect.rdb.SelectTokenizer;
 import jp.co.flect.util.DateFormatHolder;
@@ -28,8 +29,6 @@ public class RdbQueryModel {
 		this.con = con;
 		this.model = model;
 		this.baseQuery = checkQuery(query);
-System.out.println("base: " + baseQuery);
-System.out.println("order: " + order);
 	}
 	
 	private String checkQuery(String query) {
@@ -131,8 +130,8 @@ System.out.println("order: " + order);
 		this.order = null;
 	}
 		
-	public GridData getGridData(int page, int rowCount) throws SQLException {
-		return getGridData(page, rowCount, null);
+	public GridData getGridData(int page, int rowCount, Object... params) throws SQLException {
+		return getGridData(page, rowCount, Arrays.asList(params));
 	}
 	
 	public GridData getGridData(int page, int rowCount, List<Object> params) throws SQLException {
@@ -142,7 +141,6 @@ System.out.println("order: " + order);
 			buf.append(this.where);
 		}
 		String countQuery = buildCountQuery(buf.toString());
-System.out.println("count: " + countQuery);
 		if (this.order != null) {
 			buf.append(" ORDER BY ").append(this.order);
 		}
