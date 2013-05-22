@@ -52,7 +52,7 @@ public class XMLUtils {
 	public static final String XMLNS_SOAP_ENVELOPE = "http://schemas.xmlsoap.org/soap/envelope/";
 	
 	public static final String XMLNS_SOAP12          = "http://schemas.xmlsoap.org/wsdl/soap12/";
-	public static final String XMLNS_SOAP12_ENVELOPE = "http://www.w3.org/2003/05/soapenvelope";
+	public static final String XMLNS_SOAP12_ENVELOPE = "http://www.w3.org/2003/05/soap-envelope";
 	
 	public static final DocumentBuilderFactory createDefaultDocumentBuilderFactory() {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
