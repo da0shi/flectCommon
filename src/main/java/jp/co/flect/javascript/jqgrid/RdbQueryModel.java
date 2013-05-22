@@ -134,7 +134,7 @@ public class RdbQueryModel {
 		return getGridData(page, rowCount, Arrays.asList(params));
 	}
 	
-	public GridData getGridData(int page, int rowCount, List<Object> params) throws SQLException {
+	public GridData getGridData(int page, int rowCount, List<?> params) throws SQLException {
 		StringBuilder buf = new StringBuilder(this.baseQuery);
 		if (this.where != null) {
 			buf.append(this.hasWhere ? " AND " : " WHERE ");

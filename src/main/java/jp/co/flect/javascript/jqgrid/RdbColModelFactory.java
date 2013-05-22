@@ -38,9 +38,9 @@ public class RdbColModelFactory {
 		PreparedStatement stmt0 = con.prepareStatement(query);
 		try {
 			ResultSetMetaData meta = stmt0.getMetaData();
-			return getQueryModel(query, meta);
-		} catch (SQLException e) {
-			e.printStackTrace();
+			if (meta != null) {
+				return getQueryModel(query, meta);
+			}
 		} finally {
 			stmt0.close();
 		}

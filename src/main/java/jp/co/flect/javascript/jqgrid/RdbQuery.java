@@ -65,7 +65,7 @@ public class RdbQuery {
 		return getGridData(page, rowCount, null);
 	}
 	
-	public GridData getGridData(int page, int rowCount, List<Object> params) throws SQLException {
+	public GridData getGridData(int page, int rowCount, List<?> params) throws SQLException {
 		int offset = (page - 1) * rowCount;
 		int cnt = 0;
 		if (this.countStmt != null) {
