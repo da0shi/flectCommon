@@ -18,12 +18,16 @@ import java.util.TimeZone;
 import java.text.SimpleDateFormat;
 
 import jp.co.flect.util.DateFormatHolder;
+import jp.co.flect.log.Logger;
+import jp.co.flect.log.LoggerFactory;
 
 public class RdbQuery {
 	
 	private static final String DEFAULT_DATETIME_FORMAT = "yyyy/MM/dd HH:mm:ss.SSS";
 	private static final String DEFAULT_DATE_FORMAT = "yyyy/MM/dd";
 	private static final String DEFAULT_TIME_FORMAT = "HH:mm:ss.SSS";
+	
+	private static final Logger log = LoggerFactory.getLogger(RdbQuery.class);
 	
 	private PreparedStatement queryStmt;
 	private PreparedStatement countStmt;
@@ -40,6 +44,9 @@ public class RdbQuery {
 	}
 	
 	public RdbQuery(Connection con, String query, String countQuery, boolean useOffset) throws SQLException {
+		log.debug("RdbQuery: query: {0]", query);
+		log.debug("RdbQuery: count: {0}", countQuery);
+		
 		this.useOffset = useOffset;
 		if (useOffset) {
 			query += " LIMIT ? OFFSET ?";

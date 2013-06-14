@@ -155,24 +155,17 @@ public class RdbQueryModel {
 	
 	private String buildCountQuery(String query) {
 		StringBuilder ret = new StringBuilder();
-		ret.append("SELECT COUNT(*) FROM (SELECT 1 FROM ");
+		ret.append("SELECT COUNT(*) FROM (");
 		
-		boolean bAdd = false;
 		StringBuilder buf = new StringBuilder();
 		SelectTokenizer st = new SelectTokenizer(query);
 		int n = st.next(buf);
-		while (true) {
+		while (n != SelectTokenizer.T_END) {
 			String s = buf.toString();
-			if (n == SelectTokenizer.T_END) {
-				break;
-			} else if (bAdd) {
-				if (n == SelectTokenizer.T_STRING) {
-					ret.append("'").append(s).append("' ");
-				} else {
-					ret.append(s).append(" ");
-				}
-			} else if (n == SelectTokenizer.T_LITERAL && s.equalsIgnoreCase("from")) {
-				bAdd = true;
+			if (n == SelectTokenizer.T_STRING) {
+				ret.append("'").append(s).append("' ");
+			} else {
+				ret.append(s).append(" ");
 			}
 			n = st.next(buf);
 		}
