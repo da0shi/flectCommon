@@ -44,7 +44,7 @@ public class RdbQuery {
 	}
 	
 	public RdbQuery(Connection con, String query, String countQuery, boolean useOffset) throws SQLException {
-		log.debug("RdbQuery: query: {0]", query);
+		log.debug("RdbQuery: query: {0}", query);
 		log.debug("RdbQuery: count: {0}", countQuery);
 		
 		this.useOffset = useOffset;

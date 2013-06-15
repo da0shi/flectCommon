@@ -4,59 +4,61 @@ import java.net.URL;
 import java.util.Properties;
 import org.w3c.dom.Element;
 
-import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.xml.DOMConfigurator;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Level;
-import org.apache.log4j.helpers.Loader;
-
-public class LoggerFactory {
+public abstract class LoggerFactory {
 	
+	private static final LoggerFactory impl;
 	static {
-		URL url1 = Loader.getResource("log4j.xml");
-		URL url2 = Loader.getResource("log4j.properties");
-		if (url1 == null && url2 == null) {
-			configure();
+		LoggerFactory ret = null;
+		try {
+			if (Class.forName("org.slf4j.LoggerFactory") != null) {
+				ret = new LoggerFactoryBySlf4j();
+			}
+		} catch (Exception e) {
 		}
+		if (ret == null) {
+			ret = new LoggerFactoryByLog4j();
+		}
+		impl = ret;
 	}
 	
 	public static Logger getLogger(String name) {
-		return new LoggerImpl(LogManager.getLogger(name));
+		return impl.doGetLogger(name);
 	}
 	
 	public static Logger getLogger(Class clazz) {
-		return new LoggerImpl(LogManager.getLogger(clazz));
+		return impl.doGetLogger(clazz);
 	}
 	
 	public static void configure() {
-		String name = LoggerFactory.class.getName();
-		name = name.replace('.', '/');
-		name = name.substring(0, name.lastIndexOf('/') + 1) + "log4j.properties";
-		URL url = LoggerFactory.class.getClassLoader().getResource(name);
-		configure(url);
+		impl.doConfigure();
 	}
 	
 	public static void configure(URL url) {
-		configure(url, false);
+		impl.doConfigure(url, false);
 	}
 	
 	public static void configure(URL url, boolean xml) {
-		if (xml) {
-			DOMConfigurator.configure(url);
-		} else {
-			PropertyConfigurator.configure(url);
-		}
+		impl.doConfigure(url, xml);
 	}
 	
 	public static void configure(Properties props) {
-		PropertyConfigurator.configure(props);
+		impl.doConfigure(props);
 	}
 	
 	public static void configure(Element el) {
-		DOMConfigurator.configure(el);
+		impl.doConfigure(el);
 	}
 	
 	public static void setRootLevel(Level l) {
-		LogManager.getRootLogger().setLevel(l);
+		impl.doSetRootLevel(l);
 	}
+	
+	public abstract Logger doGetLogger(String name);
+	public abstract Logger doGetLogger(Class clazz);
+	public abstract void doConfigure();
+	public abstract void doConfigure(URL url);
+	public abstract void doConfigure(URL url, boolean xml);
+	public abstract void doConfigure(Properties props);
+	public abstract void doConfigure(Element el);
+	public abstract void doSetRootLevel(Level l);
 }

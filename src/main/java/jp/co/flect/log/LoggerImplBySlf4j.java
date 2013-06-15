@@ -2,8 +2,11 @@ package jp.co.flect.log;
 
 import java.text.MessageFormat;
 
-public class LoggerImpl implements Logger {
+public class LoggerImplBySlf4j implements Logger {
 	
+	private static final org.slf4j.Marker MARKER_FATAL = org.slf4j.MarkerFactory.getMarker("FATAL");
+    
+	/*
 	static org.apache.log4j.Level convertLevel(Level l) {
 		switch(l.getIndex()) {
 			case Level.IDX_TRACE: return org.apache.log4j.Level.TRACE;
@@ -15,38 +18,39 @@ public class LoggerImpl implements Logger {
 		}
 		throw new IllegalStateException();
 	}
+	*/
 	
-	private org.apache.log4j.Logger log;
+	private org.slf4j.Logger log;
 	
-	public LoggerImpl(org.apache.log4j.Logger log) {
+	public LoggerImplBySlf4j(org.slf4j.Logger log) {
 		this.log = log;
 	}
 	
-	public boolean isDebugEnabled() { return this.log.isEnabledFor(org.apache.log4j.Level.DEBUG);};
-	public boolean isErrorEnabled() { return this.log.isEnabledFor(org.apache.log4j.Level.ERROR);};
-	public boolean isFatalEnabled() { return this.log.isEnabledFor(org.apache.log4j.Level.FATAL);};
-	public boolean isInfoEnabled() { return this.log.isEnabledFor(org.apache.log4j.Level.INFO);};
-	public boolean isTraceEnabled() { return this.log.isEnabledFor(org.apache.log4j.Level.TRACE);};
-	public boolean isWarnEnabled() { return this.log.isEnabledFor(org.apache.log4j.Level.WARN);};
+	public boolean isDebugEnabled() { return this.log.isDebugEnabled();};
+	public boolean isErrorEnabled() { return this.log.isErrorEnabled();};
+	public boolean isFatalEnabled() { return true;};
+	public boolean isInfoEnabled() { return this.log.isInfoEnabled();};
+	public boolean isTraceEnabled() { return this.log.isTraceEnabled();};
+	public boolean isWarnEnabled() { return this.log.isWarnEnabled();};
 	
-	public void trace(Object message) { this.log.trace(message);}
-	public void trace(Object message, Throwable t) { this.log.trace(message, t);}
+	public void trace(Object message) { this.log.trace(message.toString());}
+	public void trace(Object message, Throwable t) { this.log.trace(message.toString(), t);}
 	public void trace(Throwable t) { this.log.trace(t.toString(), t);}
-	public void debug(Object message) { this.log.debug(message);}
-	public void debug(Object message, Throwable t) { this.log.debug(message, t);}
+	public void debug(Object message) { this.log.debug(message.toString());}
+	public void debug(Object message, Throwable t) { this.log.debug(message.toString(), t);}
 	public void debug(Throwable t) { this.log.debug(t.toString(), t);}
-	public void info(Object message) { this.log.info(message);}
-	public void info(Object message, Throwable t) { this.log.info(message, t);}
+	public void info(Object message) { this.log.info(message.toString());}
+	public void info(Object message, Throwable t) { this.log.info(message.toString(), t);}
 	public void info(Throwable t) { this.log.info(t.toString(), t);}
-	public void warn(Object message) { this.log.warn(message);}
-	public void warn(Object message, Throwable t) { this.log.warn(message, t);}
+	public void warn(Object message) { this.log.warn(message.toString());}
+	public void warn(Object message, Throwable t) { this.log.warn(message.toString(), t);}
 	public void warn(Throwable t) { this.log.warn(t.toString(), t);}
-	public void error(Object message) { this.log.error(message);}
-	public void error(Object message, Throwable t) { this.log.error(message, t);}
+	public void error(Object message) { this.log.error(message.toString());}
+	public void error(Object message, Throwable t) { this.log.error(message.toString(), t);}
 	public void error(Throwable t) { this.log.error(t.toString(), t);}
-	public void fatal(Object message) { this.log.fatal(message);}
-	public void fatal(Object message, Throwable t) { this.log.fatal(message, t);}
-	public void fatal(Throwable t) { this.log.fatal(t.toString(), t);}
+	public void fatal(Object message) { this.log.error(MARKER_FATAL, message.toString());}
+	public void fatal(Object message, Throwable t) { this.log.error(MARKER_FATAL, message.toString(), t);}
+	public void fatal(Throwable t) { this.log.error(MARKER_FATAL, t.toString(), t);}
 
 	public void trace(Object message, Object... args) {
 		if (isTraceEnabled()) {
@@ -97,6 +101,13 @@ public class LoggerImpl implements Logger {
 		return MessageFormat.format(message.toString(), args);
 	}
 	
-	public Level getLevel() { return Level.toLevel(this.log.getLevel().toString());}
-	public void setLevel(Level l) { this.log.setLevel(convertLevel(l));}
+	public Level getLevel() { 
+		//ToDo
+		return Level.INFO;
+	}
+	public void setLevel(Level l) { 
+		/*
+		this.log.setLevel(convertLevel(l));
+		*/
+	}
 }
