@@ -36,6 +36,7 @@ public class RdbQueryModel {
 		StringBuilder ret = new StringBuilder();
 		StringBuilder buf = new StringBuilder();
 		
+		int bracketCount = 0;
 		int n = st.next(buf);
 		while (true) {
 			boolean addSpace = true;
@@ -44,7 +45,7 @@ public class RdbQueryModel {
 					String s = buf.toString();
 					if (s.equalsIgnoreCase("where")) {
 						this.hasWhere = true;
-					} else if (s.equalsIgnoreCase("order")) {
+					} else if (bracketCount == 0 && s.equalsIgnoreCase("order")) {
 						n = st.next(buf);
 						if (n != SelectTokenizer.T_LITERAL || !buf.toString().equalsIgnoreCase("by")) {
 							throw new IllegalArgumentException(query);
@@ -66,9 +67,15 @@ public class RdbQueryModel {
 				case SelectTokenizer.T_STRING:
 					break;
 				case SelectTokenizer.T_COMMA:
+					addSpace = false;
+					break;
 				case SelectTokenizer.T_OPEN_BRACKET:
+					addSpace = false;
+					bracketCount++;
+					break;
 				case SelectTokenizer.T_CLOSE_BRACKET:
 					addSpace = false;
+					bracketCount--;
 					break;
 				case SelectTokenizer.T_NUMBER:
 				case SelectTokenizer.T_BOOLEAN:

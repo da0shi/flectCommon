@@ -126,7 +126,7 @@ public class SelectTokenizer {
 				buf.append(c);
 				if (index < len) {
 					char c2 = str.charAt(index);
-					if (c2 == '=') {
+					if (c2 == '=' || (c == '<' && c2 == '>')) {
 						buf.append(c2);
 						index++;
 						return T_LITERAL;
