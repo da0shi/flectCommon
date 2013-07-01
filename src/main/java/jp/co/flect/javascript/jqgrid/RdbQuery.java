@@ -268,7 +268,8 @@ public class RdbQuery {
 			case Types.OTHER:
 			case Types.STRUCT:
 			default:
-				throw new IllegalArgumentException("Not supported: " + type);
+				log.warn("Not supported: column=" + idx + ", type=" + type);
+				return rs.getString(idx);
 		}
  	}
 }
