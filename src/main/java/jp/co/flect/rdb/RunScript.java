@@ -21,10 +21,14 @@ public class RunScript {
 	private static Logger log = LoggerFactory.getLogger(RunScript.class);
 	
 	private Connection con;
+	private boolean ignoreDdlError = false;
 	
 	public RunScript(Connection con) {
 		this.con = con;
 	}
+	
+	public boolean isIgnoreDdlError() { return this.ignoreDdlError;}
+	public void setIgnoreDdlError(boolean b) { this.ignoreDdlError = b;}
 	
 	public void run(File f) throws SQLException, IOException {
 		log.info("Run script: " + f);
@@ -32,13 +36,15 @@ public class RunScript {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "utf-8"));
 		try {
 			List<String> tableList = new ArrayList<String>();
-			ResultSet rs = con.getMetaData().getTables(null, null, "%", null);
-			try {
-				while (rs.next()) {
-					tableList.add(rs.getString(3));
+			if (this.ignoreDdlError) {
+				ResultSet rs = con.getMetaData().getTables(null, null, "%", null);
+				try {
+					while (rs.next()) {
+						tableList.add(rs.getString(3));
+					}
+				} finally {
+					rs.close();
 				}
-			} finally {
-				rs.close();
 			}
 			StringBuilder buf = new StringBuilder();
 			String line = reader.readLine();
@@ -78,13 +84,22 @@ public class RunScript {
 			}
 			log.info("Execute sql: " + sql);
 		} catch (SQLException e) {
-			if (!isIgnorable(tableList, sql)) {
-				e.printStackTrace();
+			if (isIgnorable(tableList, sql)) {
+				try {
+					con.rollback();
+				} catch (SQLException e2) {
+					log.error(e2.toString(), e2);
+				}
+			} else {
+				log.error("Abort sql: " + sql, e);
 			}
 		}
 	}
 	
 	private boolean isIgnorable(List<String> tableList, String sql) {
+		if (!this.ignoreDdlError) {
+			return false;
+		}
 		StringTokenizer st = new StringTokenizer(sql, " \n");
 		if (st.countTokens() < 3) {
 			return false;
