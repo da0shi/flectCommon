@@ -119,8 +119,9 @@ public class RdbColModelFactory {
 					}
 					col.setFormatter(fmt);
 					col.setFormatOption(ColModel.FMT_OPTION_THOUSANDS_SEPARATOR, ",");
-					col.setFormatOption(ColModel.FMT_OPTION_DEFAULT_VALUE, 0);
+					col.setFormatOption(ColModel.FMT_OPTION_DEFAULT_VALUE, "");
 					col.setWidth(80);
+					col.setAlign(ColModel.ALIGN_RIGHT);
 					break;
 				case Types.BIT:
 				case Types.BOOLEAN:

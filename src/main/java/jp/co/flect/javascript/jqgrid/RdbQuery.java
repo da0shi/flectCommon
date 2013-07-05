@@ -193,83 +193,108 @@ public class RdbQuery {
 	}
 	
 	public Object getObject(ResultSet rs, int idx, int type) throws SQLException {
+		Object ret = null;
 		switch (type) {
 			case Types.ARRAY:
-				return rs.getArray(idx);
+				ret = rs.getArray(idx);
+				break;
 			case Types.BIGINT:
 			case Types.DECIMAL:
 			case Types.NUMERIC:
-				return rs.getBigDecimal(idx);
+				ret = rs.getBigDecimal(idx);
+				break;
 			case Types.BINARY:
 			case Types.LONGVARBINARY:
 			case Types.VARBINARY:
-				return rs.getBytes(idx);
+				ret = rs.getBytes(idx);
+				break;
 			case Types.BIT:
 			case Types.BOOLEAN:
-				return rs.getBoolean(idx);
+				ret = rs.getBoolean(idx);
+				break;
 			case Types.BLOB:
-				return rs.getBlob(idx);
+				ret = rs.getBlob(idx);
+				break;
 			case Types.CHAR:
 			case Types.LONGNVARCHAR:
 			case Types.LONGVARCHAR:
 			case Types.NCHAR:
 			case Types.NVARCHAR:
 			case Types.VARCHAR:
-				return rs.getString(idx);
+				ret = rs.getString(idx);
+				break;
 			case Types.CLOB:
-				return rs.getClob(idx);
+				ret = rs.getClob(idx);
+				break;
 			case Types.NCLOB:
-				return rs.getNClob(idx);
+				ret = rs.getNClob(idx);
+				break;
 			case Types.DOUBLE:
 			case Types.REAL:
-				return rs.getDouble(idx);
+				ret = rs.getDouble(idx);
+				break;
 			case Types.FLOAT:
-				return rs.getFloat(idx);
+				ret = rs.getFloat(idx);
+				break;
 			case Types.INTEGER:
 			case Types.SMALLINT:
 			case Types.TINYINT:
-				return rs.getInt(idx);
+				ret = rs.getInt(idx);
+				break;
 			case Types.JAVA_OBJECT:
-				return rs.getObject(idx);
+				ret = rs.getObject(idx);
+				break;
 			case Types.NULL:
-				return null;
+				ret = null;
+				break;
 			case Types.REF:
-				return rs.getRef(idx);
+				ret = rs.getRef(idx);
+				break;
 			case Types.ROWID:
-				return rs.getRowId(idx);
+				ret = rs.getRowId(idx);
+				break;
 			case Types.SQLXML:
-				return rs.getSQLXML(idx);
+				ret = rs.getSQLXML(idx);
+				break;
 			case Types.DATE:
 				Date d = rs.getDate(idx);
-				if (d == null) {
-					return null;
-				} else if (this.formats.getTimeDifference() != 0) {
-					d = new Date(d.getTime() + this.formats.getTimeDifference());
+				if (d != null) {
+					if (this.formats.getTimeDifference() != 0) {
+						d = new Date(d.getTime() + this.formats.getTimeDifference());
+					}
+					ret = this.formats.getDateFormat().format(d);
 				}
-				return this.formats.getDateFormat().format(d);
+				break;
 			case Types.TIME:
 				Time t = rs.getTime(idx);
-				if (t == null) {
-					return null;
-				} else if (this.formats.getTimeDifference() != 0) {
-					t = new Time(t.getTime() + this.formats.getTimeDifference());
+				if (t != null) {
+					if (this.formats.getTimeDifference() != 0) {
+						t = new Time(t.getTime() + this.formats.getTimeDifference());
+					}
+					ret = this.formats.getTimeFormat().format(t);
 				}
-				return this.formats.getTimeFormat().format(t);
+				break;
 			case Types.TIMESTAMP:
 				Timestamp ts = rs.getTimestamp(idx);
-				if (ts == null) {
-					return null;
-				} else if (this.formats.getTimeDifference() != 0) {
-					ts = new Timestamp(ts.getTime() + this.formats.getTimeDifference());
+				if (ts != null) {
+					if (this.formats.getTimeDifference() != 0) {
+						ts = new Timestamp(ts.getTime() + this.formats.getTimeDifference());
+					}
+					ret = this.formats.getDatetimeFormat().format(ts);
 				}
-				return this.formats.getDatetimeFormat().format(ts);
+				break;
 			case Types.DATALINK:
 			case Types.DISTINCT:
 			case Types.OTHER:
 			case Types.STRUCT:
 			default:
 				log.warn("Not supported: column=" + idx + ", type=" + type);
-				return rs.getString(idx);
+				ret = rs.getString(idx);
+				break;
 		}
+		if (rs.wasNull()) {
+			ret = null;
+		}
+		return ret;
  	}
 }
