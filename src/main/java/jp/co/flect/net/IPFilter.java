@@ -27,6 +27,10 @@ public class IPFilter {
 	}
 	
 	private List<Matcher> matchers = new ArrayList<Matcher>();
+	private boolean allowUnknown = false;
+	
+	public boolean isAllowUnknown() { return this.allowUnknown;}
+	public void setAllowUnknown(boolean b) { this.allowUnknown = b;}
 	
 	/**
 	 * 許可するIPアドレスを追加します。
@@ -66,7 +70,11 @@ public class IPFilter {
 		for (String s : tests) {
 			s = s.trim();
 			if ("unknown".equals(s)) {
-				return false;
+				if (this.allowUnknown) {
+					continue;
+				} else {
+					return false;
+				}
 			}
 			for (Matcher m : this.matchers) {
 				if (m.match(s)) {
