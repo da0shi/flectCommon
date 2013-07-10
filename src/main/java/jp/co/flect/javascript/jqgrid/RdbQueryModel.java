@@ -16,6 +16,8 @@ public class RdbQueryModel {
 	private boolean hasWhere;
 	
 	private boolean useOffset;
+	private boolean hasLimitOrOffset = false;
+	
 	private String where;
 	private String order;
 	
@@ -45,15 +47,23 @@ public class RdbQueryModel {
 					String s = buf.toString();
 					if (s.equalsIgnoreCase("where")) {
 						this.hasWhere = true;
+					} else if (s.equalsIgnoreCase("limit") || s.equalsIgnoreCase("offset")) {
+						this.hasLimitOrOffset = true;
 					} else if (bracketCount == 0 && s.equalsIgnoreCase("order")) {
 						n = st.next(buf);
 						if (n != SelectTokenizer.T_LITERAL || !buf.toString().equalsIgnoreCase("by")) {
 							throw new IllegalArgumentException(query);
 						}
 						n = st.next(buf);
+						boolean bComma = true;
 						StringBuilder orderBuf = new StringBuilder();
 						while (n != SelectTokenizer.T_END) {
-							orderBuf.append(buf).append(" ");
+							String strOrder = buf.toString();
+							orderBuf.append(strOrder).append(" ");
+							if (!bComma && (strOrder.equalsIgnoreCase("limit") || strOrder.equalsIgnoreCase("offset"))) {
+								this.hasLimitOrOffset = true;
+							}
+							bComma = n == SelectTokenizer.T_COMMA;
 							n = st.next(buf);
 						}
 						this.order = orderBuf.toString().trim();
@@ -101,6 +111,8 @@ public class RdbQueryModel {
 	
 	public boolean isUseOffset() { return this.useOffset;}
 	public void setUseOffset(boolean b) { this.useOffset = b;}
+	
+	public boolean canUseOffset() { return this.useOffset && !hasLimitOrOffset;}
 	
 	public String getWhere() { return this.where;}
 	public void setWhere(String s) { this.where = s;}
@@ -151,7 +163,7 @@ public class RdbQueryModel {
 		if (this.order != null) {
 			buf.append(" ORDER BY ").append(this.order);
 		}
-		RdbQuery query = new RdbQuery(this.con, buf.toString(), countQuery, this.useOffset);
+		RdbQuery query = new RdbQuery(this.con, buf.toString(), countQuery, canUseOffset());
 		try {
 			query.setDateFormatHolder(this.formats);
 			return query.getGridData(page, rowCount, params);
