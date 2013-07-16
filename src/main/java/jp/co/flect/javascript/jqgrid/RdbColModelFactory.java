@@ -139,6 +139,7 @@ public class RdbColModelFactory {
 				case Types.CLOB:
 				case Types.NCLOB:
 				case Types.SQLXML:
+				case Types.OTHER:
 					//string
 					break;
 				case Types.DATE:
@@ -178,6 +179,7 @@ public class RdbColModelFactory {
 			case Types.SQLXML:
 			case Types.TIME:
 			case Types.TIMESTAMP:
+			case Types.OTHER:
 				return true;
 			case Types.BINARY:
 			case Types.LONGVARBINARY:
@@ -189,7 +191,6 @@ public class RdbColModelFactory {
 			case Types.ARRAY:
 			case Types.DATALINK:
 			case Types.DISTINCT:
-			case Types.OTHER:
 			case Types.STRUCT:
 			default:
 				return false;

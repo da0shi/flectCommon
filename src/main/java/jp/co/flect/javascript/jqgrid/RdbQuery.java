@@ -222,6 +222,7 @@ public class RdbQuery {
 			case Types.NCHAR:
 			case Types.NVARCHAR:
 			case Types.VARCHAR:
+			case Types.OTHER:
 				ret = rs.getString(idx);
 				break;
 			case Types.CLOB:
@@ -286,7 +287,6 @@ public class RdbQuery {
 				break;
 			case Types.DATALINK:
 			case Types.DISTINCT:
-			case Types.OTHER:
 			case Types.STRUCT:
 			default:
 				log.warn("Not supported: column=" + idx + ", type=" + type);

@@ -76,13 +76,29 @@ public class SelectTokenizer {
 		boolean mayBool = false;
 		switch (c) {
 			case '-':
+			case '#':
 				buf.append(c);
-				skipWhitespace();
-				if (index == len) {
+				if (index < len && str.charAt(index) == '>') {
+					if (index+1 < len && str.charAt(index+1) == '>') {
+						buf.append(">>");
+						index += 2;
+					} else {
+						buf.append(">");
+						index++;
+					}
+					return T_LITERAL;
+				}
+				if (c == '-') {
+					skipWhitespace();
+					if (index == len) {
+						error = INVALID_LITERAL;
+						return T_ERROR;
+					}
+					return number(buf);
+				} else {
 					error = INVALID_LITERAL;
 					return T_ERROR;
 				}
-				return number(buf);
 			case '0':
 			case '1':
 			case '2':
@@ -210,6 +226,8 @@ public class SelectTokenizer {
 				case '!':
 				case '<':
 				case '>':
+				case '-':
+				case '#':
 					index--;
 					bEnd = true;
 					break;
