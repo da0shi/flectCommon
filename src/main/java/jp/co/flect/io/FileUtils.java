@@ -26,6 +26,14 @@ public class FileUtils {
 		}
 	}
 	
+	public static String readFileAsString(File f, String enc) throws IOException {
+		return new String(readFile(f), enc);
+	}
+	
+	public static String readFileAsString(File f) throws IOException {
+		return readFileAsString(f, "utf-8");
+	}
+	
 	public static void writeFile(File file, byte[] data) throws IOException {
 		FileOutputStream os = new FileOutputStream(file);
 		try {
@@ -33,6 +41,14 @@ public class FileUtils {
 		} finally {
 			os.close();
 		}
+	}
+	
+	public static void writeFile(File file, String text, String enc) throws IOException {
+		writeFile(file, text.getBytes(enc));
+	}
+	
+	public static void writeFile(File file, String text) throws IOException {
+		writeFile(file, text, "utf-8");
 	}
 	
 	public static boolean contentEquals(File f1, File f2) throws IOException {
