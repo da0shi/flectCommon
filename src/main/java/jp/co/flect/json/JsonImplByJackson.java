@@ -12,4 +12,13 @@ public class JsonImplByJackson implements JsonImpl {
 			throw new JsonException(e);
 		}
 	}
+	
+	public String toJson(Object o) {
+		try {
+			return new ObjectMapper().writeValueAsString(o);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

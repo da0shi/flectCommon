@@ -34,4 +34,8 @@ public class JsonUtils {
 	public static LinkedHashMap<String, Object> fromJsonToMap(String json) throws JsonException {
 		return fromJson(json, LinkedHashMap.class);
 	}
+	
+	public static String toJson(Object o) {
+		return impl.toJson(o);
+	}
 }

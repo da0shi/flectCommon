@@ -12,4 +12,8 @@ public class JsonImplByGson implements JsonImpl {
 			throw new JsonException(e);
 		}
 	}
+	
+	public String toJson(Object o) {
+		return new Gson().toJson(o);
+	}
 }
