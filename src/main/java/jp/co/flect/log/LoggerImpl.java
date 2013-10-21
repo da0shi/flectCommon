@@ -97,6 +97,17 @@ public class LoggerImpl implements Logger {
 		return MessageFormat.format(message.toString(), args);
 	}
 	
-	public Level getLevel() { return Level.toLevel(this.log.getLevel().toString());}
+	public Level getLevel() { 
+		org.apache.log4j.Category c = this.log;
+		while (c != null) {
+			org.apache.log4j.Level l = c.getLevel();
+			if (l != null) {
+				return Level.toLevel(l.toString());
+			}
+			c = c.getParent();
+		}
+		return null;
+	}
+	
 	public void setLevel(Level l) { this.log.setLevel(convertLevel(l));}
 }

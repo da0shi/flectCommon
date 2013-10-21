@@ -9,17 +9,28 @@ public abstract class LoggerFactory {
 	private static final LoggerFactory impl;
 	static {
 		LoggerFactory ret = null;
-		try {
-			if (Class.forName("org.slf4j.LoggerFactory") != null) {
-				ret = new LoggerFactoryBySlf4j();
+		String factoryClass = System.getProperty("jp.co.flect.log.LoggerFactory");
+		if (factoryClass != null) {
+			try {
+				Class c = Class.forName(factoryClass);
+				ret = (LoggerFactory)c.newInstance();
+			} catch (Exception e) {
 			}
-		} catch (Exception e) {
+		}
+		if (ret == null) {
+			try {
+				Class.forName("org.slf4j.LoggerFactory");
+				ret = new LoggerFactoryBySlf4j();
+			} catch (Exception e) {
+			}
 		}
 		if (ret == null) {
 			ret = new LoggerFactoryByLog4j();
 		}
 		impl = ret;
 	}
+	
+	public static LoggerFactory getInstance() { return impl;}
 	
 	public static Logger getLogger(String name) {
 		return impl.doGetLogger(name);
