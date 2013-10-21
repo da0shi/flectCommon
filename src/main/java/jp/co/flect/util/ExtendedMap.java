@@ -1,5 +1,7 @@
 package jp.co.flect.util;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -134,4 +136,33 @@ public class ExtendedMap extends HashMap<String, Object> {
 		}
 	}
 	
+	/**
+	 * 指定のクラスを再帰探索し、最初に見つけたオブジェクトを返します。
+	 */
+	public <T> T searchClass(Class<T> clazz) {
+		return doSearchClass(this, clazz);
+	}
+	
+	private static <T> T doSearchClass(Map map, Class<T> clazz) {
+		List<Map> list = null;
+		for (Object value : map.values()) {
+			if (value.getClass() == clazz) {
+				return (T)value;
+			} else if (value instanceof Map) {
+				if (list == null) {
+					list = new ArrayList<Map>();
+				}
+				list.add((Map)value);
+			}
+		}
+		if (list != null) {
+			for (Map childMap : list) {
+				T ret = doSearchClass(childMap, clazz);
+				if (ret != null) {
+					return ret;
+				}
+			}
+		}
+		return null;
+	}
 }
