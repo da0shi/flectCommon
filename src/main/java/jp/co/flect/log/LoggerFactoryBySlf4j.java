@@ -30,6 +30,7 @@ public class LoggerFactoryBySlf4j extends LoggerFactory {
 	
 	@Override
 	public void doConfigure() {
+		throw new UnsupportedOperationException();
 		/*
 		String name = LoggerFactoryByLog4j.class.getName();
 		name = name.replace('.', '/');
@@ -46,6 +47,7 @@ public class LoggerFactoryBySlf4j extends LoggerFactory {
 	
 	@Override
 	public void doConfigure(URL url, boolean xml) {
+		throw new UnsupportedOperationException();
 		/*
 		if (xml) {
 			DOMConfigurator.configure(url);
@@ -57,6 +59,7 @@ public class LoggerFactoryBySlf4j extends LoggerFactory {
 	
 	@Override
 	public void doConfigure(Properties props) {
+		throw new UnsupportedOperationException();
 		/*
 		PropertyConfigurator.configure(props);
 		*/
@@ -64,6 +67,7 @@ public class LoggerFactoryBySlf4j extends LoggerFactory {
 	
 	@Override
 	public void doConfigure(Element el) {
+		throw new UnsupportedOperationException();
 		/*
 		DOMConfigurator.configure(el);
 		*/
@@ -71,6 +75,7 @@ public class LoggerFactoryBySlf4j extends LoggerFactory {
 	
 	@Override
 	public void doSetRootLevel(Level l) {
+		throw new UnsupportedOperationException();
 		/*
 		LogManager.getRootLogger().setLevel(LoggerImpl.convertLevel(l));
 		*/

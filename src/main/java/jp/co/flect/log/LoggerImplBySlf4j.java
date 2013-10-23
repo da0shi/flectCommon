@@ -24,6 +24,7 @@ public class LoggerImplBySlf4j implements Logger {
 	
 	public LoggerImplBySlf4j(org.slf4j.Logger log) {
 		this.log = log;
+		debug("Logger class: " + log.getClass());
 	}
 	
 	public boolean isDebugEnabled() { return this.log.isDebugEnabled();};
@@ -102,10 +103,10 @@ public class LoggerImplBySlf4j implements Logger {
 	}
 	
 	public Level getLevel() { 
-		//ToDo
-		return Level.INFO;
+		throw new UnsupportedOperationException();
 	}
 	public void setLevel(Level l) { 
+		throw new UnsupportedOperationException();
 		/*
 		this.log.setLevel(convertLevel(l));
 		*/

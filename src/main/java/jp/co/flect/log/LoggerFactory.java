@@ -19,13 +19,20 @@ public abstract class LoggerFactory {
 		}
 		if (ret == null) {
 			try {
+				Class.forName("org.apache.log4j.LogManager");
+				ret = new LoggerFactoryByLog4j();
+			} catch (Exception e) {
+			}
+		}
+		if (ret == null) {
+			try {
 				Class.forName("org.slf4j.LoggerFactory");
 				ret = new LoggerFactoryBySlf4j();
 			} catch (Exception e) {
 			}
 		}
 		if (ret == null) {
-			ret = new LoggerFactoryByLog4j();
+			throw new IllegalStateException("Can not find any logger libraries.");
 		}
 		impl = ret;
 	}
