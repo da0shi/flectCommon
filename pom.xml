@@ -17,6 +17,14 @@
 		<github.global.server>github</github.global.server>
 	</properties>
 	
+	<repositories>
+		<repository>
+			<id>flect</id>
+			<name>flect</name>
+			<url>http://flect.github.io/maven-repo/</url>
+		</repository>
+	</repositories>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
@@ -132,6 +140,7 @@
 						<artifactId>githubDoclet</artifactId>
 						<version>1.0</version>
 					</docletArtifact>
+					<additionalparam>-github https://github.com/shunjikonishi/flectCommon/tree/master/src/main/java</additionalparam>
 					<useStandardDocletOptions>true</useStandardDocletOptions>
 				</configuration>
 			</plugin>
