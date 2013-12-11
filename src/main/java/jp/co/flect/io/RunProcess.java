@@ -135,7 +135,7 @@ public class RunProcess {
 						if (os != null) {
 							os.write(buf, 0, n);
 						}
-						n = is.read();
+						n = is.read(buf);
 					}
 					if (os != null) {
 						os.flush();
