@@ -165,4 +165,42 @@ public class ExtendedMap extends HashMap<String, Object> {
 		}
 		return null;
 	}
+	
+	/**
+	 * 指定のクラスのリストを再帰探索し、最初に見つけたオブジェクトを返します。
+	 */
+	public <T> List<T> searchListOfClass(Class<T> clazz) {
+		return doSearchListOfClass(this, clazz);
+	}
+	
+	private static <T> List<T> doSearchListOfClass(Map map, Class<T> clazz) {
+		List<Map> mapList = null;
+		for (Object value : map.values()) {
+			if (value instanceof List) {
+				List list = (List)value;
+				if (list.size() > 0 && list.get(0).getClass() == clazz) {
+					List<T> ret = new ArrayList<T>();
+					for (Object v : list) {
+						ret.add((T)v);
+					}
+					return ret;
+				}
+			} else if (value instanceof Map) {
+				if (mapList == null) {
+					mapList = new ArrayList<Map>();
+				}
+				mapList.add((Map)value);
+			}
+		}
+		if (mapList != null) {
+			for (Map childMap : mapList) {
+				List<T> ret = doSearchListOfClass(childMap, clazz);
+				if (ret != null) {
+					return ret;
+				}
+			}
+		}
+		return null;
+	}
+	
 }
