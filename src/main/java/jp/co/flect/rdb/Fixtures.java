@@ -107,6 +107,9 @@ public class Fixtures {
 		try {
 			int idx = 1;
 			for (Object o : map.values()) {
+				if (o instanceof java.util.Date) {
+					o = new java.sql.Timestamp(((java.util.Date)o).getTime());
+				}
 				stmt.setObject(idx++, o);
 			}
 			return stmt.executeUpdate();
