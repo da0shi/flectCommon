@@ -84,8 +84,8 @@ public class ResourceGen {
 			if (idx == -1) {
 				return;
 			}
-			String key = s.substring(0, idx);
-			String value = s.substring(idx+1);
+			String key = s.substring(0, idx).trim();
+			String value = s.substring(idx+1).trim();
 			String lang = "";
 			if (key.endsWith("]")) {
 				idx = key.indexOf('[');
